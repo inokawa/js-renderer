@@ -1,4 +1,4 @@
-import { canvasPainter } from "./painter";
+import { canvasPainter } from "./painter/canvas";
 import { createRenderer } from "./renderer";
 
 window.addEventListener("error", (e) => {

@@ -38,7 +38,7 @@ export interface ViewStyle {
   readonly backgroundColor?: string;
 }
 
-export interface TextStyle {
+export interface TextStyle extends ViewStyle {
   readonly text: string;
   readonly fontSize: number;
   readonly color: string;
