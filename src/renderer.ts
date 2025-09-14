@@ -1,5 +1,6 @@
+import type { Node } from "./jsx-runtime";
 import { Painter } from "./painter";
-import { FixedView, Node } from "./types";
+import { Draw } from "./types";
 
 interface QueueNode<T> {
   readonly data: T;
@@ -75,7 +76,7 @@ export const createRenderer = (painter: Painter) => {
       painter.size(width, height, dpr);
     },
     render: (root: Node) => {
-      const list: FixedView[] = [];
+      const list: Draw[] = [];
 
       // Traverse the tree in DFS order to respect local order of
       // components (unlike in level order traversal that will be used
@@ -90,11 +91,32 @@ export const createRenderer = (painter: Painter) => {
           throw new Error("Node should exist.");
         }
 
-        list.push(node.value);
+        const style = node.value;
+        list.push(
+          "text" in style
+            ? {
+                x: style.left ?? 0,
+                y: style.top ?? 0,
+                width: style.width ?? 0,
+                height: style.height ?? 0,
+                zIndex: style.zIndex ?? 0,
+                text: style.text,
+                fontSize: style.fontSize ?? 14,
+                color: style.color ?? "#fff",
+              }
+            : {
+                x: style.left ?? 0,
+                y: style.top ?? 0,
+                width: style.width ?? 0,
+                height: style.height ?? 0,
+                zIndex: style.zIndex ?? 0,
+                backgroundColor: style.backgroundColor ?? "transparent",
+              }
+        );
 
         let p = node.lastChild;
         while (p) {
-          if (!("text" in p.value.input) && p.value.input.display === "none") {
+          if (p.value.display === "none") {
             p = p.prev;
             continue;
           }

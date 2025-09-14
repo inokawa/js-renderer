@@ -19,17 +19,17 @@ export const canvasPainter = (
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       for (const view of views) {
-        if ("text" in view.input) {
-          ctx.font = view.input.fontSize + "px sans-serif";
-          ctx.fillStyle = view.input.color;
+        if ("text" in view) {
+          ctx.font = view.fontSize + "px sans-serif";
+          ctx.fillStyle = view.color;
           // Because by default in Canvas API Y is the baseline of the
           // text, we need to calculate the height of the text and then
           // offset it by that amount.
-          const metrics = ctx.measureText(view.input.text);
+          const metrics = ctx.measureText(view.text);
           const height =
             metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
 
-          ctx.fillText(view.input.text, view.x, view.y + height);
+          ctx.fillText(view.text, view.x, view.y + height);
         } else if (view.backgroundColor !== "transparent") {
           ctx.fillStyle = view.backgroundColor;
           ctx.fillRect(view.x, view.y, view.width, view.height);

@@ -1,8 +1,6 @@
-import { Tree } from "./data";
-
 export interface ViewStyle {
-  readonly width?: number | `${number}%` | undefined;
-  readonly height?: number | `${number}%` | undefined;
+  readonly width?: number; // | `${number}%` | undefined;
+  readonly height?: number; // | `${number}%` | undefined;
   readonly flexDirection?: "row" | "column";
   readonly justifyContent?:
     | "flex-start"
@@ -22,16 +20,16 @@ export interface ViewStyle {
   readonly left?: number;
   readonly right?: number;
   readonly bottom?: number;
-  readonly padding?: number;
-  readonly paddingHorizontal?: number;
-  readonly paddingVertical?: number;
+  // readonly padding?: number;
+  // readonly paddingHorizontal?: number;
+  // readonly paddingVertical?: number;
   readonly paddingLeft?: number;
   readonly paddingRight?: number;
   readonly paddingTop?: number;
   readonly paddingBottom?: number;
-  readonly margin?: number;
-  readonly marginHorizontal?: number;
-  readonly marginVertical?: number;
+  // readonly margin?: number;
+  // readonly marginHorizontal?: number;
+  // readonly marginVertical?: number;
   readonly marginLeft?: number;
   readonly marginRight?: number;
   readonly marginTop?: number;
@@ -41,26 +39,26 @@ export interface ViewStyle {
 }
 
 export interface TextStyle extends ViewStyle {
-  readonly text: string;
-  readonly fontSize: number;
-  readonly color: string;
+  readonly fontSize?: number;
+  readonly color?: string;
 }
 
-export interface FixedView {
-  readonly input: ViewStyle | TextStyle;
+interface DrawCommon {
   readonly x: number;
   readonly y: number;
   readonly width: number;
   readonly height: number;
   readonly zIndex: number;
+}
+
+export interface ViewDraw extends DrawCommon {
   readonly backgroundColor: string;
 }
 
-export type Node = Tree<FixedView>;
+export interface TextDraw extends DrawCommon {
+  readonly text: string;
+  readonly color: string;
+  readonly fontSize: number;
+}
 
-export const createNode = (props: Omit<FixedView, "input">): Node => {
-  return new Tree<FixedView>({
-    input: {},
-    ...props,
-  });
-};
+export type Draw = ViewDraw | TextDraw;

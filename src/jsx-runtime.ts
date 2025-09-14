@@ -1,10 +1,13 @@
-import { createNode, FixedView, Node } from "./types";
+import { Tree } from "./data";
+import { ViewStyle, TextStyle } from "./types";
+
+export type Node = Tree<ViewStyle> | Tree<TextStyle & { text: string }>;
 
 type Children = Node | Node[];
 
 interface Elements {
-  view: Omit<FixedView, "input"> & { children?: Children };
-  text: Omit<FixedView, "input">;
+  view: { children?: Children; style?: ViewStyle };
+  text: { children: string; style?: TextStyle };
 }
 
 export namespace JSX {
@@ -30,8 +33,8 @@ const jsx = <T extends keyof Elements | typeof Fragment>(
 ): Node => {
   switch (type) {
     case "view": {
-      const { children, ...rest } = props as Elements["view"];
-      const t = createNode(rest);
+      const { children, style = {} } = props as Elements["view"];
+      const t = new Tree<ViewStyle>(style);
 
       if (children) {
         for (const c of flatten(children)) {
@@ -40,6 +43,10 @@ const jsx = <T extends keyof Elements | typeof Fragment>(
       }
 
       return t;
+    }
+    case "text": {
+      const { children: text, style = {} } = props as Elements["text"];
+      return new Tree<TextStyle & { text: string }>({ ...style, text });
     }
     default: {
       throw new Error(`${type} is unimplemented`);

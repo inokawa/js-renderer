@@ -26,20 +26,24 @@ document.body.appendChild(canvas);
 const render = () => {
   renderer.render(
     <view
-      x={70}
-      y={100}
-      width={50}
-      height={50}
-      zIndex={0}
-      backgroundColor="#ff00ff"
+      style={{
+        left: 70,
+        top: 100,
+        width: 50,
+        height: 50,
+        zIndex: 0,
+        backgroundColor: "#ff00ff",
+      }}
     >
       <view
-        x={100}
-        y={200}
-        width={100}
-        height={100}
-        zIndex={0}
-        backgroundColor="#00ffff"
+        style={{
+          left: 100,
+          top: 200,
+          width: 100,
+          height: 100,
+          zIndex: 0,
+          backgroundColor: "#00ffff",
+        }}
       />
     </view>
   );
