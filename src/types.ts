@@ -1,4 +1,4 @@
-interface ViewStyle {
+export interface ViewStyle {
   width?: number | `${number}%` | undefined;
   height?: number | `${number}%` | undefined;
   flexDirection?: "row" | "column";
@@ -38,7 +38,7 @@ interface ViewStyle {
   backgroundColor?: string;
 }
 
-interface TextStyle {
+export interface TextStyle {
   text: string;
   fontSize: number;
   color: string;
