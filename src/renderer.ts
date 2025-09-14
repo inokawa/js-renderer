@@ -1,5 +1,5 @@
 import { Painter } from "./painter";
-import { FixedView, Tree } from "./types";
+import { FixedView, Node } from "./types";
 
 interface QueueNode<T> {
   readonly data: T;
@@ -32,7 +32,7 @@ class Queue<T> {
 
   dequeue(): T | null {
     const node = this.start;
-    if (node === null) {
+    if (!node) {
       return null;
     }
 
@@ -49,7 +49,7 @@ class Queue<T> {
 
   dequeueFront(): T | null {
     const node = this.end;
-    if (node === null) {
+    if (!node) {
       return null;
     }
 
@@ -74,14 +74,14 @@ export const createRenderer = (painter: Painter) => {
     size: (width: number, height: number, dpr: number) => {
       painter.size(width, height, dpr);
     },
-    render: (root: Tree<FixedView>) => {
+    render: (root: Node) => {
       const list: FixedView[] = [];
 
       // Traverse the tree in DFS order to respect local order of
       // components (unlike in level order traversal that will be used
       // for resolving positions and sizes of elements of the tree).
       // This allows for zIndex to properly work.
-      const queue = new Queue<Tree<FixedView>>();
+      const queue = new Queue<Node>();
       queue.enqueue(root);
 
       while (queue.size) {

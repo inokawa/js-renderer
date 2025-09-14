@@ -44,7 +44,7 @@ export interface TextStyle extends ViewStyle {
   readonly color: string;
 }
 
-export class Tree<T> {
+class Tree<T> {
   readonly value: T;
   next: Tree<T> | null = null;
   prev: Tree<T> | null = null;
@@ -89,3 +89,12 @@ export interface FixedView {
   readonly zIndex: number;
   readonly backgroundColor: string;
 }
+
+export type Node = Tree<FixedView>;
+
+export const createNode = (props: Omit<FixedView, "input">): Node => {
+  return new Tree<FixedView>({
+    input: {},
+    ...props,
+  });
+};

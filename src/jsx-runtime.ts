@@ -1,6 +1,4 @@
-import { FixedView, Tree } from "./types";
-
-type Node = Tree<FixedView>;
+import { createNode, FixedView, Node } from "./types";
 
 type Children = Node | Node[];
 
@@ -33,10 +31,7 @@ const jsx = <T extends keyof Elements | typeof Fragment>(
   switch (type) {
     case "view": {
       const { children, ...rest } = props as Elements["view"];
-      const t = new Tree<FixedView>({
-        input: {},
-        ...rest,
-      });
+      const t = createNode(rest);
 
       if (children) {
         for (const c of flatten(children)) {
