@@ -1,47 +1,47 @@
 export interface ViewStyle {
-  width?: number | `${number}%` | undefined;
-  height?: number | `${number}%` | undefined;
-  flexDirection?: "row" | "column";
-  justifyContent?:
+  readonly width?: number | `${number}%` | undefined;
+  readonly height?: number | `${number}%` | undefined;
+  readonly flexDirection?: "row" | "column";
+  readonly justifyContent?:
     | "flex-start"
     | "center"
     | "flex-end"
     | "space-between"
     | "space-around"
     | "space-evenly";
-  alignItems?: "flex-start" | "center" | "flex-end" | "stretch";
-  alignSelf?: "flex-start" | "center" | "flex-end" | "stretch";
-  flex?: number;
-  position?: "absolute" | "relative";
-  gap?: number;
-  zIndex?: number;
-  display?: "flex" | "none";
-  top?: number;
-  left?: number;
-  right?: number;
-  bottom?: number;
-  padding?: number;
-  paddingHorizontal?: number;
-  paddingVertical?: number;
-  paddingLeft?: number;
-  paddingRight?: number;
-  paddingTop?: number;
-  paddingBottom?: number;
-  margin?: number;
-  marginHorizontal?: number;
-  marginVertical?: number;
-  marginLeft?: number;
-  marginRight?: number;
-  marginTop?: number;
-  marginBottom?: number;
+  readonly alignItems?: "flex-start" | "center" | "flex-end" | "stretch";
+  readonly alignSelf?: "flex-start" | "center" | "flex-end" | "stretch";
+  readonly flex?: number;
+  readonly position?: "absolute" | "relative";
+  readonly gap?: number;
+  readonly zIndex?: number;
+  readonly display?: "flex" | "none";
+  readonly top?: number;
+  readonly left?: number;
+  readonly right?: number;
+  readonly bottom?: number;
+  readonly padding?: number;
+  readonly paddingHorizontal?: number;
+  readonly paddingVertical?: number;
+  readonly paddingLeft?: number;
+  readonly paddingRight?: number;
+  readonly paddingTop?: number;
+  readonly paddingBottom?: number;
+  readonly margin?: number;
+  readonly marginHorizontal?: number;
+  readonly marginVertical?: number;
+  readonly marginLeft?: number;
+  readonly marginRight?: number;
+  readonly marginTop?: number;
+  readonly marginBottom?: number;
   // The only value not related to layout.
-  backgroundColor?: string;
+  readonly backgroundColor?: string;
 }
 
 export interface TextStyle {
-  text: string;
-  fontSize: number;
-  color: string;
+  readonly text: string;
+  readonly fontSize: number;
+  readonly color: string;
 }
 
 export class Tree<T> {
@@ -81,11 +81,11 @@ export class Tree<T> {
 }
 
 export interface FixedView {
-  input: ViewStyle | TextStyle;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  zIndex: number;
-  backgroundColor: string;
+  readonly input: ViewStyle | TextStyle;
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+  readonly zIndex: number;
+  readonly backgroundColor: string;
 }

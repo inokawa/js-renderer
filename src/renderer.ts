@@ -10,7 +10,7 @@ interface QueueNode<T> {
 class Queue<T> {
   private start: QueueNode<T> | null = null;
   private end: QueueNode<T> | null = null;
-  private size = 0;
+  private _size = 0;
 
   enqueue(value: T): void {
     const node: QueueNode<T> = {
@@ -27,7 +27,7 @@ class Queue<T> {
     }
 
     this.end = node;
-    this.size += 1;
+    this._size++;
   }
 
   dequeue(): T | null {
@@ -43,7 +43,7 @@ class Queue<T> {
       this.end = null;
     }
 
-    this.size -= 1;
+    this._size--;
     return node.data;
   }
 
@@ -60,12 +60,12 @@ class Queue<T> {
       this.end = null;
     }
 
-    this.size -= 1;
+    this._size--;
     return node.data;
   }
 
-  isEmpty(): boolean {
-    return this.size === 0;
+  get size(): number {
+    return this._size;
   }
 }
 
@@ -81,7 +81,7 @@ export const createRenderer = (painter: Painter) => {
       const queue = new Queue<Tree<FixedView>>();
       queue.enqueue(node);
 
-      while (!queue.isEmpty()) {
+      while (queue.size) {
         const node = queue.dequeueFront();
         if (!node) {
           throw new Error("Node should exist.");
