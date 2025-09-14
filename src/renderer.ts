@@ -91,7 +91,7 @@ export const createRenderer = (painter: Painter) => {
 
         let p = node.lastChild;
         while (p) {
-          if (p.value.input.display === "none") {
+          if (!("text" in p.value.input) && p.value.input.display === "none") {
             p = p.prev;
             continue;
           }

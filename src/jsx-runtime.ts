@@ -1,24 +1,55 @@
-import { FixedView, TextStyle, Tree, ViewStyle } from "./types";
+import { FixedView, Tree } from "./types";
 
-export const jsx = <T extends "input" | "view">(
-  _input: T,
-  {
-    style,
-    ...props
-  }: Omit<FixedView, "input"> &
-    (T extends "input" ? { style: TextStyle } : { style?: ViewStyle }),
-  children?: Tree<FixedView>[]
-) => {
-  const t = new Tree<FixedView>({
-    input: style || {},
-    ...props,
-  });
+type Node = Tree<FixedView>;
 
-  if (children) {
-    children.forEach((c) => {
-      t.addChild(c);
-    });
+type Children = Node | Node[];
+
+interface Elements {
+  view: Omit<FixedView, "input"> & { children?: Children };
+  text: Omit<FixedView, "input">;
+}
+
+export namespace JSX {
+  export interface ElementChildrenAttribute {
+    children: unknown;
   }
 
-  return t;
+  export type Element = Node;
+
+  export type IntrinsicElements = Elements;
+}
+
+const flatten = <T>(o: T | T[]): T[] => {
+  return Array.isArray(o) ? o : [o];
 };
+
+const Fragment = "fragment";
+
+const jsx = <T extends keyof Elements | typeof Fragment>(
+  type: T,
+  props: unknown,
+  _key: unknown
+): Node => {
+  switch (type) {
+    case "view": {
+      const { children, ...rest } = props as Elements["view"];
+      const t = new Tree<FixedView>({
+        input: {},
+        ...rest,
+      });
+
+      if (children) {
+        for (const c of flatten(children)) {
+          t.addChild(c);
+        }
+      }
+
+      return t;
+    }
+    default: {
+      throw new Error(`${type} is unimplemented`);
+    }
+  }
+};
+
+export { jsx, jsx as jsxs, Fragment };
