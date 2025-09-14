@@ -1,4 +1,4 @@
-import type { Node } from "./jsx-runtime";
+import type { LayoutNode } from "./jsx-runtime";
 import { Painter } from "./painter";
 import { Draw } from "./types";
 
@@ -75,14 +75,14 @@ export const createRenderer = (painter: Painter) => {
     size: (width: number, height: number, dpr: number) => {
       painter.size(width, height, dpr);
     },
-    render: (root: Node) => {
+    render: (root: LayoutNode) => {
       const list: Draw[] = [];
 
       // Traverse the tree in DFS order to respect local order of
       // components (unlike in level order traversal that will be used
       // for resolving positions and sizes of elements of the tree).
       // This allows for zIndex to properly work.
-      const queue = new Queue<Node>();
+      const queue = new Queue<LayoutNode>();
       queue.enqueue(root);
 
       while (queue.size) {

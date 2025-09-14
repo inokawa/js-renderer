@@ -1,4 +1,4 @@
-export interface ViewStyle {
+export interface Style {
   readonly width?: number; // | `${number}%` | undefined;
   readonly height?: number; // | `${number}%` | undefined;
   readonly flexDirection?: "row" | "column";
@@ -38,10 +38,14 @@ export interface ViewStyle {
   readonly backgroundColor?: string;
 }
 
-export interface TextStyle extends ViewStyle {
+export interface TextStyle extends Style {
   readonly fontSize?: number;
   readonly color?: string;
 }
+
+export type ViewLayout = Style;
+
+export type TextLayout = TextStyle & { text: string };
 
 interface DrawCommon {
   readonly x: number;
