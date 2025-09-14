@@ -1,6 +1,7 @@
 import { FixedView } from "./types";
 
 export interface Painter {
+  size: (width: number, height: number, dpr: number) => void;
   draw: (views: readonly FixedView[]) => void;
 }
 
@@ -13,6 +14,11 @@ export const canvasPainter = (
   const bgColor = options.bgColor ?? "#000000";
 
   return {
+    size: (width, height, dpr) => {
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.scale(dpr, dpr);
+    },
     draw: (views) => {
       ctx.fillStyle = bgColor;
       ctx.fillRect(0, 0, canvas.width, canvas.height);

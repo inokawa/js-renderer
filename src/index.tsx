@@ -7,29 +7,47 @@ window.addEventListener("error", (e) => {
 
 const canvas = document.createElement("canvas");
 
-canvas.width = window.innerWidth * window.devicePixelRatio;
-canvas.height = window.innerHeight * window.devicePixelRatio;
 canvas.setAttribute("style", "display: block");
-document.body.appendChild(canvas);
 
 const renderer = createRenderer(canvasPainter(canvas));
 
-renderer.render(
-  <view
-    x={70}
-    y={100}
-    width={50}
-    height={50}
-    zIndex={0}
-    backgroundColor="#ff00ff"
-  >
+const setSize = () => {
+  const dpr = window.devicePixelRatio;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  canvas.style.width = width + "px";
+  canvas.style.height = height + "px";
+  renderer.size(width, height, dpr);
+};
+setSize();
+
+document.body.appendChild(canvas);
+
+const render = () => {
+  renderer.render(
     <view
-      x={100}
-      y={200}
-      width={100}
-      height={100}
+      x={70}
+      y={100}
+      width={50}
+      height={50}
       zIndex={0}
-      backgroundColor="#00ffff"
-    />
-  </view>
-);
+      backgroundColor="#ff00ff"
+    >
+      <view
+        x={100}
+        y={200}
+        width={100}
+        height={100}
+        zIndex={0}
+        backgroundColor="#00ffff"
+      />
+    </view>
+  );
+};
+
+render();
+
+window.addEventListener("resize", () => {
+  setSize();
+  render();
+});

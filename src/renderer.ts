@@ -71,7 +71,10 @@ class Queue<T> {
 
 export const createRenderer = (painter: Painter) => {
   return {
-    render: (node: Tree<FixedView>) => {
+    size: (width: number, height: number, dpr: number) => {
+      painter.size(width, height, dpr);
+    },
+    render: (root: Tree<FixedView>) => {
       const list: FixedView[] = [];
 
       // Traverse the tree in DFS order to respect local order of
@@ -79,7 +82,7 @@ export const createRenderer = (painter: Painter) => {
       // for resolving positions and sizes of elements of the tree).
       // This allows for zIndex to properly work.
       const queue = new Queue<Tree<FixedView>>();
-      queue.enqueue(node);
+      queue.enqueue(root);
 
       while (queue.size) {
         const node = queue.dequeueFront();
