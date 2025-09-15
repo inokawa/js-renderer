@@ -1,72 +1,33 @@
 import type { LayoutNode } from "./jsx-runtime";
 import { Drawer } from "./drawer";
 import { Draw } from "./types";
+import { LinkedList, LinkedNode } from "./data";
 
-interface QueueNode<T> {
-  readonly data: T;
-  prev: QueueNode<T> | null;
-  next: QueueNode<T> | null;
+interface QueueNode<T> extends LinkedNode<T> {
+  readonly value: T;
 }
 
 class Queue<T> {
-  private start: QueueNode<T> | null = null;
-  private end: QueueNode<T> | null = null;
-  private _size = 0;
+  private readonly list = new LinkedList<QueueNode<T>>();
 
-  enqueue(value: T): void {
-    const node: QueueNode<T> = {
-      data: value,
+  push(value: T): void {
+    this.list.push({
+      value,
       next: null,
       prev: null,
-    };
-
-    if (this.end) {
-      this.end.next = node;
-      node.prev = this.end;
-    } else {
-      this.start = node;
-    }
-
-    this.end = node;
-    this._size++;
+    });
   }
 
-  dequeue(): T | null {
-    const node = this.start;
-    if (!node) {
-      return null;
-    }
-
-    if (node.next) {
-      this.start = node.next;
-    } else {
-      this.start = null;
-      this.end = null;
-    }
-
-    this._size--;
-    return node.data;
+  pop(): T | undefined {
+    return this.list.pop()?.value;
   }
 
-  dequeueFront(): T | null {
-    const node = this.end;
-    if (!node) {
-      return null;
-    }
-
-    if (node.prev) {
-      this.end = node.prev;
-    } else {
-      this.start = null;
-      this.end = null;
-    }
-
-    this._size--;
-    return node.data;
+  shift(): T | undefined {
+    return this.list.shift()?.value;
   }
 
-  get size(): number {
-    return this._size;
+  get length(): number {
+    return this.list.length;
   }
 }
 
@@ -83,10 +44,10 @@ export const createRenderer = (drawer: Drawer) => {
       // for resolving positions and sizes of elements of the tree).
       // This allows for zIndex to properly work.
       const queue = new Queue<LayoutNode>();
-      queue.enqueue(root);
+      queue.push(root);
 
-      while (queue.size) {
-        const node = queue.dequeueFront();
+      while (queue.length) {
+        const node = queue.shift();
         if (!node) {
           throw new Error("Node should exist.");
         }
@@ -121,7 +82,7 @@ export const createRenderer = (drawer: Drawer) => {
             continue;
           }
 
-          queue.enqueue(p);
+          queue.push(p);
           p = p.prev;
         }
       }

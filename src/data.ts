@@ -1,9 +1,9 @@
-interface LinkedNode<T> {
+export interface LinkedNode<T> {
   prev: LinkedNode<T> | null;
   next: LinkedNode<T> | null;
 }
 
-class LinkedList<T extends LinkedNode<unknown>> {
+export class LinkedList<T extends LinkedNode<unknown>> {
   private _head: T | null = null;
   private _tail: T | null = null;
   private _length: number = 0;
@@ -17,14 +17,44 @@ class LinkedList<T extends LinkedNode<unknown>> {
   }
 
   push(node: T) {
-    node.prev = this._tail;
+    const tail = this._tail;
+    node.prev = tail;
     node.next = null;
 
-    if (this._tail) this._tail.next = node;
+    if (tail) tail.next = node;
     this._tail = node;
     if (!this._head) this._head = node;
 
     this._length++;
+  }
+
+  pop(): T | undefined {
+    const node = this._tail;
+    if (!node) return;
+    this._tail = node.prev as T | null;
+
+    this.checkHeadAndTail();
+    this._length--;
+
+    return node;
+  }
+
+  shift(): T | undefined {
+    const node = this._head;
+    if (!node) return;
+    this._head = node.next as T | null;
+
+    this.checkHeadAndTail();
+    this._length--;
+
+    return node;
+  }
+
+  private checkHeadAndTail() {
+    if (this._head) this._head.prev = null;
+    if (this._tail) this._tail.next = null;
+    if (!this._head) this._tail = null;
+    if (!this._tail) this._head = null;
   }
 
   get length(): number {
