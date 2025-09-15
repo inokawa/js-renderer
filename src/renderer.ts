@@ -2,6 +2,7 @@ import type { LayoutNode } from "./jsx-runtime";
 import { Drawer } from "./drawer";
 import { Draw } from "./types";
 import { LinkedList, LinkedNode } from "./data";
+import { invariant } from "./utils";
 
 interface QueueNode<T> extends LinkedNode<T> {
   readonly value: T;
@@ -32,11 +33,21 @@ class Queue<T> {
 }
 
 export const createRenderer = (drawer: Drawer) => {
+  let _width: number;
+  let _height: number;
+  let _dpr: number;
+  const _bgColor: string = "#000000";
   return {
     size: (width: number, height: number, dpr: number) => {
-      drawer.size(width, height, dpr);
+      _width = width;
+      _height = height;
+      _dpr = dpr;
     },
     render: (root: LayoutNode) => {
+      invariant(_width != null, "width is not initialized");
+      invariant(_height != null, "height is not initialized");
+      invariant(_dpr != null, "dpr is not initialized");
+
       const list: Draw[] = [];
 
       // Traverse the tree in DFS order to respect local order of
@@ -90,7 +101,7 @@ export const createRenderer = (drawer: Drawer) => {
       // Respect zIndex.
       list.sort((a, b) => a.zIndex - b.zIndex);
 
-      drawer.draw(list);
+      drawer.draw(list, _width, _height, _dpr, _bgColor);
     },
   };
 };

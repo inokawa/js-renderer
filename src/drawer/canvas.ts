@@ -1,12 +1,7 @@
 import { Drawer } from ".";
 
-export const canvasDrawer = (
-  canvas: HTMLCanvasElement,
-  options: { bgColor?: string } = {}
-): Drawer => {
+export const canvasDrawer = (canvas: HTMLCanvasElement): Drawer => {
   const ctx = canvas.getContext("2d")!;
-
-  const bgColor = options.bgColor ?? "#000000";
 
   const measureText = (
     text: string,
@@ -23,13 +18,12 @@ export const canvasDrawer = (
   };
 
   return {
-    size: (width, height, dpr) => {
+    measureText,
+    draw: (views, width, height, dpr, bgColor) => {
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       ctx.scale(dpr, dpr);
-    },
-    measureText,
-    draw: (views) => {
+
       ctx.fillStyle = bgColor;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
