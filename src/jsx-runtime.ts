@@ -1,7 +1,7 @@
-import { Tree } from "./data";
+import { TreeNode } from "./data";
 import { Style, TextStyle, ViewLayout, TextLayout } from "./types";
 
-export type LayoutNode = Tree<ViewLayout> | Tree<TextLayout>;
+export type LayoutNode = TreeNode<ViewLayout> | TreeNode<TextLayout>;
 
 type Children = LayoutNode | LayoutNode[];
 
@@ -34,7 +34,7 @@ const jsx = <T extends keyof Elements | typeof Fragment>(
   switch (type) {
     case "view": {
       const { children, style = {} } = props as Elements["view"];
-      const t = new Tree<ViewLayout>(style);
+      const t = new TreeNode<ViewLayout>(style);
 
       if (children) {
         for (const c of flatten(children)) {
@@ -46,7 +46,7 @@ const jsx = <T extends keyof Elements | typeof Fragment>(
     }
     case "text": {
       const { children: text, style = {} } = props as Elements["text"];
-      return new Tree<TextLayout>({ ...style, text });
+      return new TreeNode<TextLayout>({ ...style, text });
     }
     default: {
       throw new Error(`${type} is unimplemented`);

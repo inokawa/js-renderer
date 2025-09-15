@@ -1,35 +1,68 @@
-export class Tree<T> {
+interface LinkedNode<T> {
+  prev: LinkedNode<T> | null;
+  next: LinkedNode<T> | null;
+}
+
+class LinkedList<T extends LinkedNode<unknown>> {
+  private _head: T | null = null;
+  private _tail: T | null = null;
+  private _length: number = 0;
+
+  constructor(items?: Iterable<T>) {
+    if (items) {
+      for (const item of items) {
+        this.push(item);
+      }
+    }
+  }
+
+  push(node: T) {
+    node.prev = this._tail;
+    node.next = null;
+
+    if (this._tail) this._tail.next = node;
+    this._tail = node;
+    if (!this._head) this._head = node;
+
+    this._length++;
+  }
+
+  get length(): number {
+    return this._length;
+  }
+
+  get first(): T | null {
+    return this._head;
+  }
+
+  get last(): T | null {
+    return this._tail;
+  }
+}
+
+export class TreeNode<T> implements LinkedNode<T> {
   readonly value: T;
-  next: Tree<T> | null = null;
-  prev: Tree<T> | null = null;
-  firstChild: Tree<T> | null = null;
-  lastChild: Tree<T> | null = null;
-  parent: Tree<T> | null = null;
+  readonly children: LinkedList<TreeNode<T>>;
+  parent: TreeNode<T> | null = null;
+  prev: TreeNode<T> | null = null;
+  next: TreeNode<T> | null = null;
 
   constructor(value: T) {
     this.value = value;
-    this.next = null;
-    this.prev = null;
-    this.firstChild = null;
-    this.lastChild = null;
-    this.parent = null;
+    this.children = new LinkedList();
   }
 
-  addChild(node: Tree<T>): Tree<T> {
+  get firstChild(): TreeNode<T> | null {
+    return this.children.first;
+  }
+
+  get lastChild(): TreeNode<T> | null {
+    return this.children.last;
+  }
+
+  addChild(node: TreeNode<T>) {
     node.parent = this;
 
-    if (!this.firstChild) {
-      this.firstChild = node;
-      this.lastChild = node;
-    } else {
-      if (!this.lastChild) {
-        throw new Error("Last child must be set.");
-      }
-
-      node.prev = this.lastChild;
-      this.lastChild.next = node;
-      this.lastChild = node;
-    }
-    return node;
+    this.children.push(node);
   }
 }
