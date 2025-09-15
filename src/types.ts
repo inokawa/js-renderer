@@ -1,3 +1,5 @@
+import { TreeNode } from "./data";
+
 export interface Style {
   readonly width?: number; // | `${number}%` | undefined;
   readonly height?: number; // | `${number}%` | undefined;
@@ -43,9 +45,11 @@ export interface TextStyle extends Style {
   readonly color?: string;
 }
 
-export type ViewLayout = Style;
+export type ViewInput = Readonly<{ style: Style }>;
 
-export type TextLayout = TextStyle & { text: string };
+export type TextInput = Readonly<{ style: TextStyle; text: string }>;
+
+export type InputNode = TreeNode<ViewInput> | TreeNode<TextInput>;
 
 interface DrawCommon {
   readonly x: number;

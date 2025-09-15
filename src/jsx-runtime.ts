@@ -1,9 +1,7 @@
 import { TreeNode } from "./data";
-import { Style, TextStyle, ViewLayout, TextLayout } from "./types";
+import { Style, TextStyle, ViewInput, TextInput, InputNode } from "./types";
 
-export type LayoutNode = TreeNode<ViewLayout> | TreeNode<TextLayout>;
-
-type Children = LayoutNode | LayoutNode[];
+type Children = InputNode | InputNode[];
 
 interface Elements {
   view: { children?: Children; style?: Style };
@@ -15,7 +13,7 @@ export namespace JSX {
     children: unknown;
   }
 
-  export type Element = LayoutNode;
+  export type Element = InputNode;
 
   export type IntrinsicElements = Elements;
 }
@@ -30,11 +28,11 @@ const jsx = <T extends keyof Elements | typeof Fragment>(
   type: T,
   props: unknown,
   _key: unknown
-): LayoutNode => {
+): InputNode => {
   switch (type) {
     case "view": {
       const { children, style = {} } = props as Elements["view"];
-      const t = new TreeNode<ViewLayout>(style);
+      const t = new TreeNode<ViewInput>({ style });
 
       if (children) {
         for (const c of flatten(children)) {
@@ -46,7 +44,7 @@ const jsx = <T extends keyof Elements | typeof Fragment>(
     }
     case "text": {
       const { children: text, style = {} } = props as Elements["text"];
-      return new TreeNode<TextLayout>({ ...style, text });
+      return new TreeNode<TextInput>({ style, text });
     }
     default: {
       throw new Error(`${type} is unimplemented`);

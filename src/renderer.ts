@@ -1,6 +1,5 @@
-import type { LayoutNode } from "./jsx-runtime";
 import { Drawer } from "./drawer";
-import { Draw } from "./types";
+import { Draw, InputNode } from "./types";
 import { LinkedList, LinkedNode } from "./data";
 import { invariant } from "./utils";
 
@@ -43,7 +42,7 @@ export const createRenderer = (drawer: Drawer) => {
       _height = height;
       _dpr = dpr;
     },
-    render: (root: LayoutNode) => {
+    render: (root: InputNode) => {
       invariant(_width != null, "width is not initialized");
       invariant(_height != null, "height is not initialized");
       invariant(_dpr != null, "dpr is not initialized");
@@ -54,41 +53,39 @@ export const createRenderer = (drawer: Drawer) => {
       // components (unlike in level order traversal that will be used
       // for resolving positions and sizes of elements of the tree).
       // This allows for zIndex to properly work.
-      const queue = new Queue<LayoutNode>();
+      const queue = new Queue<InputNode>();
       queue.push(root);
 
-      while (queue.length) {
-        const node = queue.shift();
-        if (!node) {
-          throw new Error("Node should exist.");
+      let node: InputNode | undefined;
+      while ((node = queue.shift())) {
+        const value = node.value;
+        if ("text" in value) {
+          const { text, style } = value;
+          list.push({
+            x: style.left ?? 0,
+            y: style.top ?? 0,
+            width: style.width ?? 0,
+            height: style.height ?? 0,
+            zIndex: style.zIndex ?? 0,
+            text: text,
+            fontSize: style.fontSize ?? 14,
+            color: style.color ?? "#fff",
+          });
+        } else {
+          const { style } = value;
+          list.push({
+            x: style.left ?? 0,
+            y: style.top ?? 0,
+            width: style.width ?? 0,
+            height: style.height ?? 0,
+            zIndex: style.zIndex ?? 0,
+            backgroundColor: style.backgroundColor ?? "transparent",
+          });
         }
-
-        const style = node.value;
-        list.push(
-          "text" in style
-            ? {
-                x: style.left ?? 0,
-                y: style.top ?? 0,
-                width: style.width ?? 0,
-                height: style.height ?? 0,
-                zIndex: style.zIndex ?? 0,
-                text: style.text,
-                fontSize: style.fontSize ?? 14,
-                color: style.color ?? "#fff",
-              }
-            : {
-                x: style.left ?? 0,
-                y: style.top ?? 0,
-                width: style.width ?? 0,
-                height: style.height ?? 0,
-                zIndex: style.zIndex ?? 0,
-                backgroundColor: style.backgroundColor ?? "transparent",
-              }
-        );
 
         let p = node.lastChild;
         while (p) {
-          if (p.value.display === "none") {
+          if (p.value.style.display === "none") {
             p = p.prev;
             continue;
           }
