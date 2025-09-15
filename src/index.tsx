@@ -1,4 +1,4 @@
-import { canvasPainter } from "./painter/canvas";
+import { canvasDrawer } from "./drawer/canvas";
 import { createRenderer } from "./renderer";
 
 window.addEventListener("error", (e) => {
@@ -9,7 +9,7 @@ const canvas = document.createElement("canvas");
 
 canvas.setAttribute("style", "display: block");
 
-const renderer = createRenderer(canvasPainter(canvas));
+const renderer = createRenderer(canvasDrawer(canvas));
 
 const setSize = () => {
   const dpr = window.devicePixelRatio;

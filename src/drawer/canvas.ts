@@ -1,9 +1,9 @@
-import { Painter } from ".";
+import { Drawer } from ".";
 
-export const canvasPainter = (
+export const canvasDrawer = (
   canvas: HTMLCanvasElement,
   options: { bgColor?: string } = {}
-): Painter => {
+): Drawer => {
   const ctx = canvas.getContext("2d")!;
 
   const bgColor = options.bgColor ?? "#000000";

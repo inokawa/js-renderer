@@ -1,6 +1,6 @@
 import { Draw } from "../types";
 
-export interface Painter {
+export interface Drawer {
   size: (width: number, height: number, dpr: number) => void;
   measureText: (
     text: string,

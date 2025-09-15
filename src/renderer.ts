@@ -1,5 +1,5 @@
 import type { LayoutNode } from "./jsx-runtime";
-import { Painter } from "./painter";
+import { Drawer } from "./drawer";
 import { Draw } from "./types";
 
 interface QueueNode<T> {
@@ -70,10 +70,10 @@ class Queue<T> {
   }
 }
 
-export const createRenderer = (painter: Painter) => {
+export const createRenderer = (drawer: Drawer) => {
   return {
     size: (width: number, height: number, dpr: number) => {
-      painter.size(width, height, dpr);
+      drawer.size(width, height, dpr);
     },
     render: (root: LayoutNode) => {
       const list: Draw[] = [];
@@ -129,7 +129,7 @@ export const createRenderer = (painter: Painter) => {
       // Respect zIndex.
       list.sort((a, b) => a.zIndex - b.zIndex);
 
-      painter.draw(list);
+      drawer.draw(list);
     },
   };
 };
